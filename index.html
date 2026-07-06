@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordena — Webs y paneles a medida para tu negocio</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-alt:#f5f5f7;
+    --border:#e5e5e7;
+    --text:#1d1d1f;
+    --gray:#6e6e73;
+    --gray-dim:#a1a1a6;
+    --accent:#ec4a1f;
+    --accent-dark:#c93d18;
+    --shadow-md:0 10px 30px rgba(0,0,0,0.06);
+    --shadow-lg:0 30px 70px rgba(0,0,0,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--accent);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  .container{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .container-wide{max-width:1240px;margin:0 auto;padding:0 24px;}
+
+  h1,h2,h3{font-weight:700;line-height:1.08;letter-spacing:-0.03em;}
+  p{line-height:1.5;}
+
+  /* ============ NAV ============ */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0;height:52px;display:flex;align-items:center;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;}
+  .logo{font-weight:700;font-size:1.05rem;letter-spacing:-0.02em;}
+  .nav-links{display:flex;gap:30px;font-size:0.82rem;font-weight:500;}
+  .nav-links a{color:var(--text);opacity:0.8;transition:opacity 0.2s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-cta{background:var(--text);color:#fff;padding:7px 16px;border-radius:980px;font-weight:600;font-size:0.78rem;transition:background 0.2s;}
+  .nav-cta:hover{background:#000;}
+  @media(max-width:860px){.nav-links{display:none;}}
+
+  /* ============ BUTTONS ============ */
+  .btn{padding:13px 26px;border-radius:980px;font-weight:600;font-size:0.95rem;transition:background 0.2s, opacity 0.2s;display:inline-flex;align-items:center;gap:6px;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-dark{background:var(--text);color:#fff;}
+  .btn-dark:hover{background:#000;}
+  .link-arrow{color:var(--accent);font-weight:600;font-size:0.95rem;transition:opacity 0.2s;}
+  .link-arrow:hover{opacity:0.7;}
+  .link-arrow .chev{display:inline-block;transition:transform 0.2s;}
+  .link-arrow:hover .chev{transform:translateX(3px);}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;padding:170px 0 100px;text-align:center;}
+  .eyebrow{color:var(--accent);font-weight:600;font-size:0.9rem;margin-bottom:18px;display:block;}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.4rem);margin-bottom:20px;color:var(--text);}
+  .hero h1 .accent{color:var(--accent);}
+  .hero p.lead{color:var(--gray);font-size:1.25rem;max-width:640px;margin:0 auto 36px;line-height:1.5;font-weight:400;}
+  .hero-ctas{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;align-items:center;margin-bottom:64px;}
+
+  /* Hero mockup (illustrative, no real client assets) */
+  .mockup-wrap{display:flex;justify-content:center;}
+  .mockup{width:100%;max-width:560px;background:#fff;border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;position:relative;}
+  .mockup-bar{display:flex;gap:6px;padding:16px 18px;border-bottom:1px solid var(--border);}
+  .mockup-bar span{width:8px;height:8px;border-radius:50%;background:#e2e2e5;}
+  .mockup-body{padding:32px;}
+  .mockup-avatar{width:44px;height:44px;border-radius:10px;background:var(--accent);margin-bottom:18px;}
+  .mockup-line{height:9px;border-radius:4px;background:#eeeeef;margin-bottom:10px;}
+  .mockup-line.w60{width:40%;}
+  .mockup-line.w40{width:26%;}
+
+  .mockup-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 0 8px;}
+  .mockup-stat{background:var(--bg-alt);border-radius:12px;padding:14px 8px;text-align:center;}
+  .mockup-stat b{display:block;font-size:1.2rem;font-weight:700;color:var(--text);}
+  .mockup-stat span{font-size:0.65rem;color:var(--gray-dim);text-transform:uppercase;letter-spacing:0.3px;}
+
+  .mockup-chart{display:flex;align-items:flex-end;gap:8px;height:70px;margin-top:26px;padding:0 2px;}
+  .mockup-chart div{flex:1;border-radius:4px 4px 1px 1px;background:var(--accent);opacity:0.9;}
+
+  .mockup-toast{
+    position:absolute;bottom:26px;right:-14px;background:#fff;border:1px solid var(--border);
+    border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-md);
+  }
+  .mockup-toast .check{width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .mockup-toast span{font-size:0.82rem;font-weight:600;color:var(--text);}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .stagger > *{opacity:0;transform:translateY(18px);transition:opacity 0.5s ease, transform 0.5s ease;}
+  .stagger.in > *{opacity:1;transform:translateY(0);}
+  .stagger.in > *:nth-child(1){transition-delay:0.05s;} .stagger.in > *:nth-child(2){transition-delay:0.1s;}
+  .stagger.in > *:nth-child(3){transition-delay:0.15s;} .stagger.in > *:nth-child(4){transition-delay:0.2s;}
+  .stagger.in > *:nth-child(5){transition-delay:0.25s;} .stagger.in > *:nth-child(6){transition-delay:0.3s;}
+  .stagger.in > *:nth-child(7){transition-delay:0.35s;}
+
+  section{position:relative;padding:130px 0;}
+  section.alt{background:var(--bg-alt);}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 64px;}
+  .section-eyebrow{color:var(--accent);font-weight:600;font-size:0.9rem;margin-bottom:14px;display:block;}
+  .section-title{font-size:clamp(2rem,4vw,2.8rem);margin-bottom:18px;color:var(--text);}
+  .section-lead{color:var(--gray);font-size:1.15rem;line-height:1.5;}
+
+  /* ============ PROBLEMA/SOLUCION ============ */
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:920px;margin:0 auto;}
+  .compare-card{border-radius:24px;padding:36px;background:#fff;}
+  .compare-card.before{background:var(--bg-alt);}
+  .compare-card.after{background:#fff2ec;}
+  .compare-card h3{font-size:1.2rem;margin-bottom:20px;color:var(--text);}
+  .compare-list{list-style:none;}
+  .compare-list li{display:flex;gap:12px;padding:11px 0;color:var(--gray);font-size:0.96rem;text-align:left;}
+  .compare-card.after .compare-list li{color:var(--text);}
+  .tag-icon{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;margin-top:2px;}
+  .before .tag-icon{background:#e5e5e7;color:#8a8a8e;}
+  .after .tag-icon{background:var(--accent);color:#fff;}
+
+  /* ============ SERVICIOS (tiles estilo Apple) ============ */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .service-card{border-radius:24px;padding:36px 32px;transition:transform 0.3s;}
+  .service-card:hover{transform:translateY(-4px);}
+  .service-card:nth-child(1){background:#eef4ff;}
+  .service-card:nth-child(2){background:#fff2ec;}
+  .service-card:nth-child(3){background:#f0f9f0;}
+  .service-icon{font-size:2rem;margin-bottom:20px;display:block;}
+  .service-card h3{font-size:1.2rem;margin-bottom:10px;font-weight:700;color:var(--text);}
+  .service-card p{color:var(--gray);font-size:0.95rem;line-height:1.55;margin-bottom:20px;}
+  .service-price{font-weight:700;font-size:0.92rem;color:var(--text);}
+  .service-price a{color:var(--accent);font-weight:700;}
+
+  /* ============ COMO FUNCIONA ============ */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:920px;margin:0 auto;}
+  .step-card{text-align:center;}
+  .step-number{width:44px;height:44px;border-radius:50%;background:var(--text);color:#fff;font-size:1.05rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+  .step-card h3{font-size:1.1rem;margin-bottom:10px;font-weight:700;color:var(--text);}
+  .step-card p{color:var(--gray);font-size:0.94rem;line-height:1.55;}
+
+  /* ============ PLANES ============ */
+  .plans-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;}
+  .plan-card{background:#fff;border:1px solid var(--border);border-radius:24px;padding:40px;position:relative;display:flex;flex-direction:column;text-align:left;}
+  .plan-card.highlight{border-color:var(--text);box-shadow:var(--shadow-md);}
+  .plan-badge{position:absolute;top:-13px;left:40px;background:var(--accent);color:#fff;font-weight:700;font-size:0.72rem;padding:6px 14px;border-radius:980px;}
+  .plan-name{font-size:1.3rem;margin-bottom:8px;font-weight:700;color:var(--text);}
+  .plan-desc{color:var(--gray);font-size:0.92rem;margin-bottom:26px;min-height:34px;}
+
+  .pay-toggle{display:flex;gap:4px;background:var(--bg-alt);border-radius:980px;padding:4px;margin-bottom:28px;max-width:340px;}
+  .toggle-btn{flex:1;padding:9px 14px;border:none;background:transparent;color:var(--gray);font-weight:600;font-size:0.82rem;border-radius:980px;cursor:pointer;transition:background 0.2s, color 0.2s;}
+  .toggle-btn.active{background:var(--text);color:#fff;}
+
+  .plan-price-row{display:flex;align-items:center;gap:22px;margin-bottom:6px;flex-wrap:wrap;}
+  .price-part{display:flex;flex-direction:column;}
+  .price-label{font-size:0.72rem;color:var(--gray-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;font-weight:600;}
+  .price-value{font-size:1.9rem;font-weight:700;color:var(--text);letter-spacing:-0.02em;}
+  .price-value small{font-size:0.72rem;color:var(--gray);font-weight:500;margin-left:2px;}
+  .price-plus{font-size:1.3rem;color:var(--gray-dim);align-self:flex-end;margin-bottom:8px;}
+  .plan-setup-note{color:var(--gray);font-size:0.88rem;margin-bottom:28px;line-height:1.5;}
+
+  .plan-price{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;}
+  .plan-price .amount{font-size:2rem;font-weight:700;color:var(--text);letter-spacing:-0.02em;}
+  .plan-price .amount.small{font-size:1.6rem;}
+  .plan-price .period{color:var(--gray);font-size:0.9rem;}
+  .plan-setup{color:var(--gray-dim);font-size:0.85rem;margin-bottom:28px;}
+
+  .plan-features{list-style:none;margin-bottom:30px;flex-grow:1;}
+  .plan-features li{display:flex;gap:10px;padding:9px 0;font-size:0.92rem;color:var(--text);}
+  .plan-features li .check{color:var(--accent);font-weight:800;flex-shrink:0;}
+  .plan-btn{display:block;text-align:center;width:100%;padding:14px;border-radius:980px;font-weight:600;font-size:0.92rem;transition:background 0.2s;}
+  .plan-card:not(.highlight) .plan-btn{background:var(--bg-alt);color:var(--text);}
+  .plan-card:not(.highlight) .plan-btn:hover{background:#e8e8ea;}
+  .plan-card.highlight .plan-btn{background:var(--text);color:#fff;}
+  .plan-card.highlight .plan-btn:hover{background:#000;}
+
+  /* ============ PARA QUIEN ============ */
+  .verticals-wrap{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .vertical-pill{padding:12px 22px;border-radius:980px;background:var(--bg-alt);font-size:0.92rem;font-weight:500;color:var(--text);}
+
+  /* ============ FAQ ============ */
+  .faq-list{display:flex;flex-direction:column;gap:2px;max-width:720px;margin:0 auto;}
+  .faq-item{background:#fff;border-bottom:1px solid var(--border);padding:24px 4px;}
+  .faq-item summary{cursor:pointer;font-weight:600;font-size:1.02rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--text);text-align:left;}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:'+';font-size:1.4rem;color:var(--gray-dim);flex-shrink:0;transition:transform 0.2s;font-weight:300;}
+  .faq-item[open] summary::after{transform:rotate(45deg);}
+  .faq-item p{color:var(--gray);font-size:0.95rem;line-height:1.6;margin-top:16px;text-align:left;}
+
+  /* ============ CTA FINAL ============ */
+  .cta-final{text-align:center;}
+  .cta-final h2{font-size:clamp(2rem,4vw,2.8rem);margin-bottom:16px;color:var(--text);}
+  .cta-final p{color:var(--gray);margin-bottom:34px;max-width:460px;margin-left:auto;margin-right:auto;font-size:1.1rem;}
+  .contact-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:center;}
+
+  footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;color:var(--gray-dim);font-size:0.85rem;}
+  footer a{color:var(--accent);font-weight:600;}
+  footer p{margin-bottom:6px;}
+  footer strong{color:var(--text);}
+
+  @media (max-width:860px){
+    .compare-grid{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .plans-grid{grid-template-columns:1fr;}
+    .steps-grid{grid-template-columns:1fr;gap:36px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container-wide nav-inner">
+    <div class="logo">Ordena</div>
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#planes">Planes</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a class="nav-cta" href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container reveal">
+    <span class="eyebrow">Para pymes y negocios locales</span>
+    <h1>Ordena tu negocio.<br><span class="accent">Con la herramienta que de verdad necesita.</span></h1>
+    <p class="lead">Sitios web, paneles de administración a medida, o ambos — construidos según cómo funciona tu negocio, no una plantilla genérica.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#contacto">Quiero mi web</a>
+      <a class="link-arrow" href="#como-funciona">Ver cómo funciona <span class="chev">›</span></a>
+    </div>
+  </div>
+
+  <div class="container mockup-wrap reveal">
+    <div class="mockup">
+      <div class="mockup-bar"><span></span><span></span><span></span></div>
+      <div class="mockup-body">
+        <div class="mockup-avatar"></div>
+        <div class="mockup-line w60"></div>
+        <div class="mockup-line w40"></div>
+
+        <div class="mockup-stats">
+          <div class="mockup-stat"><b>128</b><span>Turnos</span></div>
+          <div class="mockup-stat"><b>34</b><span>Clientes</span></div>
+          <div class="mockup-stat"><b>$1.2M</b><span>Facturado</span></div>
+        </div>
+
+        <div class="mockup-chart">
+          <div style="height:40%;"></div>
+          <div style="height:65%;"></div>
+          <div style="height:45%;"></div>
+          <div style="height:80%;"></div>
+          <div style="height:60%;"></div>
+          <div style="height:95%;"></div>
+          <div style="height:70%;"></div>
+        </div>
+      </div>
+      <div class="mockup-toast">
+        <div class="check">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9 17.5L20 6.5" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span>Reserva confirmada</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROBLEMA / SOLUCION ================= -->
+<section class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">El problema</span>
+      <h2 class="section-title">Tu negocio ya funciona.<br>Tus herramientas, no tanto.</h2>
+      <p class="section-lead">A unos les falta una web, a otros les falta orden interno — turnos, inventario y facturas repartidos entre Excel, WhatsApp y papel.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card before reveal">
+        <h3>Sin Ordena</h3>
+        <ul class="compare-list">
+          <li><span class="tag-icon">✕</span>No tienes web propia, o no refleja lo que ofreces</li>
+          <li><span class="tag-icon">✕</span>Todo repartido entre Excel, WhatsApp y papel</li>
+          <li><span class="tag-icon">✕</span>Ningún lugar único donde ver tu negocio</li>
+          <li><span class="tag-icon">✕</span>Cada trabajador anota a su manera</li>
+        </ul>
+      </div>
+      <div class="compare-card after reveal">
+        <h3>Con Ordena</h3>
+        <ul class="compare-list">
+          <li><span class="tag-icon">✓</span>Web profesional con tu marca y tus datos reales</li>
+          <li><span class="tag-icon">✓</span>Un panel a tu medida con lo que necesites</li>
+          <li><span class="tag-icon">✓</span>Toda tu información en un solo lugar</li>
+          <li><span class="tag-icon">✓</span>Tu equipo trabajando de forma ordenada</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICIOS ================= -->
+<section id="servicios">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Qué ofrecemos</span>
+      <h2 class="section-title">Tres formas de ordenar tu negocio</h2>
+      <p class="section-lead">Elige solo lo que necesitas — cada cosa se construye a tu medida.</p>
+    </div>
+
+    <div class="services-grid stagger">
+      <div class="service-card">
+        <span class="service-icon">🌐</span>
+        <h3>Solo sitio web</h3>
+        <p>Tu presencia online, profesional y a tu medida — desde tu Instagram si lo tienes, o desde cero con tus ideas.</p>
+        <p class="service-price">Desde $150.000 pago único</p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">📅</span>
+        <h3>Web + Reservas</h3>
+        <p>El paquete completo para negocios que agendan clientes: web conectada a tu propio sistema de reservas.</p>
+        <p class="service-price">Desde $25.000/mes — <a href="#planes">ver planes</a></p>
+      </div>
+      <div class="service-card">
+        <span class="service-icon">🗂️</span>
+        <h3>Panel a medida</h3>
+        <p>Turnos, clientes, trabajadores, inventario, facturas, propiedades — los módulos que tu negocio necesite.</p>
+        <p class="service-price">Desde $250.000 — <a href="#planes">ver planes</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMO FUNCIONA ================= -->
+<section id="como-funciona" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Cómo funciona</span>
+      <h2 class="section-title">De la idea a tu herramienta, en días</h2>
+      <p class="section-lead">Sin procesos eternos ni formularios interminables.</p>
+    </div>
+
+    <div class="steps-grid stagger">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Nos cuentas qué necesitas</h3>
+        <p>Una web, un panel, o ambos. Tu Instagram si lo tienes, o simplemente tus ideas.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Lo construimos a tu medida</h3>
+        <p>Diseño y funciones según lo que definimos — sin módulos de más.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Lo lanzamos y tú lo usas</h3>
+        <p>Tu web y/o panel quedan funcionando, con nuestro soporte continuo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLANES ================= -->
+<section id="planes">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Planes</span>
+      <h2 class="section-title">Elige tu plan</h2>
+      <p class="section-lead">Desde una web simple hasta un panel completo para tu operación.</p>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card highlight reveal">
+        <span class="plan-badge" id="planBadge" style="display:none;">Sin pago inicial</span>
+        <div class="plan-name">Web + Reservas</div>
+        <p class="plan-desc">El paquete completo para negocios que agendan clientes.</p>
+
+        <div class="pay-toggle">
+          <button class="toggle-btn active" data-mode="setup" type="button">Con instalación</button>
+          <button class="toggle-btn" data-mode="full" type="button">Sin pago inicial</button>
+        </div>
+
+        <div class="plan-price-row">
+          <div class="price-part">
+            <span class="price-label">Instalación</span>
+            <span class="price-value" id="planSetupAmount">$200.000</span>
+          </div>
+          <div class="price-plus">+</div>
+          <div class="price-part">
+            <span class="price-label">Mensualidad</span>
+            <span class="price-value" id="planAmount">$25.000<small>/mes</small></span>
+          </div>
+        </div>
+        <p class="plan-setup-note" id="planNote">Incluye diseño de tu web, sistema de reservas y puesta en marcha.</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span>Web profesional a tu medida</li>
+          <li><span class="check">✓</span>Sistema de reservas online</li>
+          <li><span class="check">✓</span>Panel de reservas (agenda del día)</li>
+          <li><span class="check">✓</span>Hosting y dominio incluidos</li>
+          <li><span class="check">✓</span>Soporte continuo</li>
+        </ul>
+        <a class="plan-btn" href="#contacto">Elegir este plan</a>
+      </div>
+
+      <div class="plan-card reveal">
+        <div class="plan-name">Panel a Medida</div>
+        <p class="plan-desc">Para negocios que necesitan ordenar su operación interna.</p>
+        <div class="plan-price"><span class="amount small">Desde $250.000</span></div>
+        <p class="plan-setup">+ $35.000/mes mantención y soporte</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span>Módulos a tu medida (turnos, clientes, inventario, facturas...)</li>
+          <li><span class="check">✓</span>Acceso para todo tu equipo</li>
+          <li><span class="check">✓</span>Hosting y base de datos incluidos</li>
+          <li><span class="check">✓</span>Soporte continuo</li>
+        </ul>
+        <a class="plan-btn" href="#contacto">Cotizar mi panel</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PARA QUIEN ================= -->
+<section class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Para quién es</span>
+      <h2 class="section-title">Negocios que agendan clientes,<br>y negocios que necesitan orden interno</h2>
+    </div>
+    <div class="verticals-wrap reveal">
+      <span class="vertical-pill">Barberías y salones</span>
+      <span class="vertical-pill">Gimnasios y estudios</span>
+      <span class="vertical-pill">Spas y centros de estética</span>
+      <span class="vertical-pill">Veterinarias</span>
+      <span class="vertical-pill">Administradoras de propiedades</span>
+      <span class="vertical-pill">Empresas con turnos y trabajadores</span>
+      <span class="vertical-pill">Negocios con inventario</span>
+      <span class="vertical-pill">Talleres y servicios técnicos</span>
+      <span class="vertical-pill">Profesionales independientes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">Preguntas frecuentes</span>
+      <h2 class="section-title">Antes de que preguntes</h2>
+      <p class="section-lead">Si tienes otra duda, escríbenos directo por WhatsApp o email.</p>
+    </div>
+
+    <div class="faq-list stagger">
+      <details class="faq-item">
+        <summary>¿Necesito tener Instagram para pedir mi web?</summary>
+        <p>No. Si tienes Instagram lo usamos como base real para tu web. Si no tienes, o no te representa, la construimos igual a partir de tus ideas y de lo que nos cuentes de tu negocio.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Pueden ustedes ver los datos de mi negocio?</summary>
+        <p>Como cualquier proveedor que hostea tu sistema, técnicamente tenemos acceso para dar soporte — igual que un contador tiene acceso a tus cuentas. Solo accedemos cuando tú lo pides, y lo dejamos por escrito en el acuerdo. Tu dominio queda siempre a tu nombre, y si alguna vez decides irte, te entregamos un respaldo completo de tus datos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué tan seguro es esto contra hackers?</summary>
+        <p>Toda la conexión va encriptada (HTTPS), las contraseñas se guardan protegidas — nunca en texto plano — y la base de datos tiene reglas que impiden que un negocio vea los datos de otro. Además, hacemos respaldos automáticos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuánto se demora en estar listo?</summary>
+        <p>Una web simple, entre 3 y 5 días. Web + Reservas, alrededor de una semana. Un panel a medida depende de cuántos módulos necesites.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Tengo que pagar hosting o dominio aparte?</summary>
+        <p>No — todos los planes incluyen hosting, dominio y base de datos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Puedo pedir cambios después de que esté lista?</summary>
+        <p>Sí. Todos los planes incluyen soporte continuo — cambios de textos, fotos o ajustes menores están incluidos. Cambios grandes de alcance se cotizan aparte.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué pasa si quiero cancelar?</summary>
+        <p>Tu dominio es tuyo desde el primer día. Si cancelas, te entregamos un respaldo completo de tus datos. Lo que se detiene es el servicio en sí, igual que con cualquier otro software por suscripción.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACTO ================= -->
+<section id="contacto" class="alt">
+  <div class="container">
+    <div class="cta-final reveal">
+      <h2>¿Listo para ordenar tu negocio?</h2>
+      <p>Escríbenos y en unos días tienes tu web y/o tu panel funcionando.</p>
+      <div class="contact-row">
+        <a class="btn btn-dark" href="https://wa.me/56900000000" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.33A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.44-4.38-1.2l-.31-.19-3 .79.8-2.92-.2-.3A7.94 7.94 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>
+          WhatsApp
+        </a>
+        <a class="link-arrow" href="mailto:fes.informaciones@gmail.com">Escribir por email <span class="chev">›</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Ordena</strong> — Webs y paneles de administración a medida para pymes y negocios locales</p>
+  <p>© <span id="year"></span> Ordena · <a href="mailto:fes.informaciones@gmail.com">fes.informaciones@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+  const PLAN_DATA = {
+    setup: { setupAmount: '$200.000', amount: '$25.000', note: 'Incluye diseño de tu web, sistema de reservas y puesta en marcha.', badge: false },
+    full: { setupAmount: '$0', amount: '$65.000', note: 'Sin costo de entrada — todo incluido en la mensualidad.', badge: true },
+  };
+  const planSetupAmount = document.getElementById('planSetupAmount');
+  const planAmount = document.getElementById('planAmount');
+  const planNote = document.getElementById('planNote');
+  const planBadge = document.getElementById('planBadge');
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const data = PLAN_DATA[btn.dataset.mode];
+      planSetupAmount.textContent = data.setupAmount;
+      planAmount.innerHTML = data.amount + '<small>/mes</small>';
+      planNote.textContent = data.note;
+      planBadge.style.display = data.badge ? 'block' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
